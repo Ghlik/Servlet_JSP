@@ -17,40 +17,40 @@ public class Cadastro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String nome = req.getParameter("nome");
-        String email = req.getParameter("email");
-        String marca = req.getParameter("marca");
-        String modelo = req.getParameter("modelo");
-        String dataDeRetirada = req.getParameter("data_retirada");
-        String dataDeDevolucao = req.getParameter("data_devolucao");
+        String name = req.getParameter("nome");
+        String mail = req.getParameter("email");
+        String brand = req.getParameter("marca");
+        String model = req.getParameter("modelo");
+        String dateDeparture = req.getParameter("data_retirada");
+        String dateReturn = req.getParameter("data_devolucao");
 
-        LocalDate inicioAluguel = LocalDate.parse(dataDeRetirada);
-        DateTimeFormatter dataAluguelFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        dataDeRetirada = inicioAluguel.format(dataAluguelFormatter);
+        LocalDate rentBegin = LocalDate.parse(dateDeparture);
+        DateTimeFormatter dateRentFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        dateDeparture = rentBegin.format(dateRentFormatter);
 
-        LocalDate fimAluguel = LocalDate.parse(dataDeDevolucao);
-        DateTimeFormatter dataDevolucaoFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        dataDeDevolucao = fimAluguel.format(dataDevolucaoFormatter);
+        LocalDate rentEnd = LocalDate.parse(dateReturn);
+        DateTimeFormatter dateReturnFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        dateReturn = rentEnd.format(dateReturnFormatter);
 
-        long diarias = ChronoUnit.DAYS.between(inicioAluguel, fimAluguel);
-        double preco = Preco.calcularValor(diarias);
+        long dailys = ChronoUnit.DAYS.between(rentBegin, rentEnd);
+        double price = Preco.calculateValue(dailys);
 
         if (
-                nome.equals("") || email.equals("")
-                        || marca.equals("") || modelo.equals("")
-                        || dataDeRetirada.equals("") || dataDeDevolucao.equals("")
+                name.equals("") || mail.equals("")
+                        || brand.equals("") || model.equals("")
+                        || dateDeparture.equals("") || dateReturn.equals("")
         ) {
             resp.setContentType("text/html");
             resp.getWriter().println("<h3>Dados obrigatórios não preenchidos!</h3>");
         } else {
-            req.setAttribute("nome", nome);
-            req.setAttribute("email", email);
-            req.setAttribute("marca", marca);
-            req.setAttribute("modelo", modelo);
-            req.setAttribute("data_retirada", dataDeRetirada);
-            req.setAttribute("data_devolucao", dataDeDevolucao);
-            req.setAttribute("diarias", diarias);
-            req.setAttribute("preco", preco);
+            req.setAttribute("nome", name);
+            req.setAttribute("email", mail);
+            req.setAttribute("marca", brand);
+            req.setAttribute("modelo", model);
+            req.setAttribute("data_retirada", dateDeparture);
+            req.setAttribute("data_devolucao", dateReturn);
+            req.setAttribute("diarias", dailys);
+            req.setAttribute("preco", price);
 
             RequestDispatcher rd = req.getRequestDispatcher("data.jsp");
             rd.forward(req, resp);
